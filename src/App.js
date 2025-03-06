@@ -17,6 +17,7 @@ function App() {
       instance
         .ssoSilent({
           scopes: loginRequest_user.scopes,
+          loadFrameTimeout: 60000,
         })
         .then((response) => {
           instance.setActiveAccount(response.account);
@@ -24,7 +25,7 @@ function App() {
         .catch((err) => {
           console.error("ssoSilent_error", err);
           if (err instanceof InteractionRequiredAuthError) {
-            instance.loginRedirect(loginRequest_user).catch((err) => console.error("loginRedirect_error: ", err));
+            instance.loginPopup(loginRequest_user).catch((err) => console.error("loginPopup_error: ", err));
           }
         });
     }
