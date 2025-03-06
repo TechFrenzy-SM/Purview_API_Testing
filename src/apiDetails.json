@@ -1,0 +1,30 @@
+{
+  "GraphAPI": {
+    "endpoint": "https://graph.microsoft.com/v1.0/me",
+    "permission": "https://graph.microsoft.com/user.read"
+  },
+  "MSGraphAPI": {
+    "endpoint": "https://msgraphapi.microsoft.com/api/1",
+    "permission": "https://msgraphapi.microsoft.com/user.read.all"
+  },
+  "ProtectionScopesInitialCall": {
+    "endpoint": "",
+    "permission": "https://api.purview.microsoft.com/Purview.ProtectionScopes.Read.All"
+  },
+  "ProtectionScopesSubsequentCalls": {
+    "endpoint": "",
+    "permission": "https://api.purview.microsoft.com/Purview.ProtectionScopes.Read.All"
+  },
+  "ProcessContentStartConversation": {
+    "endpoint": "",
+    "permission": "https://api.purview.microsoft.com/Purview.Content.Process.All"
+  },
+  "ProcessContentContinueConversationWithResponse": {
+    "endpoint": "",
+    "permission": "https://api.purview.microsoft.com/Purview.Content.Process.All"
+  },
+  "ProcessContentContinueConversationWithPrompt": {
+    "endpoint": "",
+    "permission": "https://api.purview.microsoft.com/Purview.Content.Process.All"
+  }
+}
