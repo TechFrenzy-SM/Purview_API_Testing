@@ -19,7 +19,6 @@ const RequestSection = () => {
   const [requestBody, setRequestBody] = useState("{\n  \n}");
   const [key, setKey] = useState("");
   const [value, setValue] = useState("");
-  const [accessToken, setAccessToken] = useState();
 
   const handleChange = (event, newValue) => {
     setTabValue(newValue);

@@ -25,7 +25,7 @@ function App() {
         .catch((err) => {
           console.error("ssoSilent_error", err);
           if (err instanceof InteractionRequiredAuthError) {
-            instance.loginPopup(loginRequest_user).catch((err) => console.error("loginPopup_error: ", err));
+            instance.loginRedirect(loginRequest_user).catch((err) => console.error("loginRedirect_error: ", err));
           }
         });
     }

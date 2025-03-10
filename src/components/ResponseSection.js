@@ -1,4 +1,4 @@
-import { Box, Button, Tab, Tabs, TextField } from "@mui/material";
+import { Box, Tab, Tabs, TextField } from "@mui/material";
 import React, { useContext, useState } from "react";
 import { TerminalContext } from "../TerminalContext";
 

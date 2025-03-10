@@ -21,7 +21,6 @@ const APISection = () => {
           <InputLabel id="select-api">Select API</InputLabel>
           <Select labelId="select-api" id="select-api" value={api} onChange={handleChange} label="Select API">
             <MenuItem value={"GraphAPI"}>Graph API</MenuItem>
-            <MenuItem value={"MSGraphAPI"}>MS Graph API</MenuItem>
             <MenuItem value={"ProtectionScopesInitialCall"}>Protection Scopes - Initial Call</MenuItem>
             <MenuItem value={"ProtectionScopesSubsequentCalls"}>Protection Scopes - Subsequent Calls</MenuItem>
             <MenuItem value={"ProcessContentStartConversation"}>Process Content - Start Conversation</MenuItem>
