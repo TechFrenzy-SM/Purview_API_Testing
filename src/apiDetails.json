@@ -3,28 +3,24 @@
     "endpoint": "https://graph.microsoft.com/v1.0/me",
     "permission": "https://graph.microsoft.com/user.read"
   },
-  "MSGraphAPI": {
-    "endpoint": "https://msgraphapi.microsoft.com/api/1",
-    "permission": "https://msgraphapi.microsoft.com/user.read.all"
-  },
   "ProtectionScopesInitialCall": {
-    "endpoint": "",
+    "endpoint": "https://api.purview.microsoft.com/v1/users/",
     "permission": "https://api.purview.microsoft.com/Purview.ProtectionScopes.Read.All"
   },
   "ProtectionScopesSubsequentCalls": {
-    "endpoint": "",
+    "endpoint": "https://api.purview.microsoft.com/v1/users/",
     "permission": "https://api.purview.microsoft.com/Purview.ProtectionScopes.Read.All"
   },
   "ProcessContentStartConversation": {
-    "endpoint": "",
+    "endpoint": "https://api.purview.microsoft.com/v1/users/",
     "permission": "https://api.purview.microsoft.com/Purview.Content.Process.All"
   },
   "ProcessContentContinueConversationWithResponse": {
-    "endpoint": "",
+    "endpoint": "https://api.purview.microsoft.com/v1/users/",
     "permission": "https://api.purview.microsoft.com/Purview.Content.Process.All"
   },
   "ProcessContentContinueConversationWithPrompt": {
-    "endpoint": "",
+    "endpoint": "https://api.purview.microsoft.com/v1/users/",
     "permission": "https://api.purview.microsoft.com/Purview.Content.Process.All"
   }
 }
