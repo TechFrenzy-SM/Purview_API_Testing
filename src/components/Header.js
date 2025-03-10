@@ -5,7 +5,7 @@ import { AuthenticatedTemplate, useMsal } from "@azure/msal-react";
 import { loginRequest_user } from "../authConfig";
 import { InteractionRequiredAuthError } from "@azure/msal-browser";
 import { GetUserProfilePic } from "../GraphData";
-import { FeedOutlined, HelpOutlineOutlined } from "@mui/icons-material";
+import { FeedbackOutlined, HelpOutlineOutlined } from "@mui/icons-material";
 
 const Header = () => {
   const { instance, accounts } = useMsal();
@@ -98,7 +98,7 @@ const Header = () => {
           <Box sx={{ flexGrow: 1 }} />
           <AuthenticatedTemplate>
             <IconButton title="Feedback" style={{ color: "#fff" }}>
-              <FeedOutlined />
+              <FeedbackOutlined />
             </IconButton>
             <IconButton title="Help" style={{ color: "#fff" }}>
               <HelpOutlineOutlined />
