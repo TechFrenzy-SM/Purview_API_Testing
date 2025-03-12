@@ -4,8 +4,8 @@ export const msalConfig = {
   auth: {
     clientId: "c9d70071-6f6a-4dff-9960-c1f48b48f12f",
     authority: "https://login.microsoftonline.com/common",
-    redirectUri: "http://localhost:3000",
-    postLogoutRedirectUri: "http://localhost:3000",
+    redirectUri: "https://p4ai-dzaqdqf7f6fccfcw.westus-01.azurewebsites.net/",
+    postLogoutRedirectUri: "https://p4ai-dzaqdqf7f6fccfcw.westus-01.azurewebsites.net/",
   },
   cache: {
     cacheLocation: "sessionStorage",
