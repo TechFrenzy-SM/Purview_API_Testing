@@ -2,13 +2,13 @@ import { Box, Button, Tab, Tabs, TextField, Table, TableBody, TableCell, TableHe
 import { Delete } from "@mui/icons-material";
 import React, { useContext, useState } from "react";
 import { useMsal } from "@azure/msal-react";
-import { ApiContext } from "../APIContext";
-import { TerminalContext } from "../TerminalContext";
+import { ApiContext } from "../contexts/APIContext";
+import { TerminalContext } from "../contexts/TerminalContext";
 import { InteractionRequiredAuthError } from "@azure/msal-browser";
 import axios from "axios";
 
 const RequestSection = () => {
-  const { endpoint, scopes } = useContext(ApiContext);
+  const { endpoint, setEndpoint, scopes, apiWrapperUrl, method } = useContext(ApiContext);
   const { appendTerminalOutput, setResponseBody, setResponseHeaders } = useContext(TerminalContext);
   const { instance, accounts } = useMsal();
   const [tabValue, setTabValue] = useState(0);
@@ -44,6 +44,7 @@ const RequestSection = () => {
       const response = await instance.acquireTokenSilent(request);
       const accessToken = response.accessToken;
       appendTerminalOutput("User token acquired successfully...");
+
       return accessToken;
     } catch (error) {
       if (error instanceof InteractionRequiredAuthError) {
@@ -66,28 +67,54 @@ const RequestSection = () => {
     }
   };
 
-  const makeApiCall = async (accessToken) => {
+  const makeApiCall = async (url, accessToken, method) => {
     try {
       const updatedHeaders = headers.map((header) => (header.key === "Authorization" ? { ...header, value: `Bearer ${accessToken}` } : header));
       setHeaders(updatedHeaders);
-      const headersObj = updatedHeaders.reduce((acc, header) => {
-        acc[header.key] = header.value;
-        return acc;
-      }, {});
+      // const headersObj = updatedHeaders.reduce((acc, header) => {
+      //   acc[header.key] = header.value;
+      //   return acc;
+      // }, {});
 
-      const apiResponse = await axios.get(endpoint, { headers: headersObj });
-      console.log("API Response: ", apiResponse);
-      appendTerminalOutput(JSON.stringify(apiResponse.data, null, 2));
+      const body = { token: accessToken, user_id: accounts[0].localAccountId };
+
+      const apiResponse = await axios({
+        method: method,
+        url: url,
+        data: body,
+        headers: "Content-Type: application/json",
+        transformResponse: [
+          (data, headers) => {
+            return { data: JSON.parse(data), headers: headers };
+          },
+        ],
+      });
+      const responseHeaders = {
+        status: apiResponse.status,
+        statusCode: apiResponse.statusText,
+        date: apiResponse.headers.date,
+        "request-id": apiResponse.headers["request-id"],
+        "client-request-id": apiResponse.headers["client-request-id"],
+        "request-context": apiResponse.headers["request-context"],
+        "x-ratelimit-limit": apiResponse.headers["x-ratelimit-limit"],
+        "x-ratelimit-remaining": apiResponse.headers["x-ratelimit-remaining"],
+        "x-ratelimit-reset": apiResponse.headers["x-ratelimit-reset"],
+        "x-ms-service-latency": apiResponse.headers["x-ms-service-latency"],
+        "x-azure-ref": apiResponse.headers["x-azure-ref"],
+        "x-cache": apiResponse.headers["x-cache"],
+      };
+
+      appendTerminalOutput(`Response Headers: ${JSON.stringify(responseHeaders, null, 2)}`);
+      appendTerminalOutput(`Response : ${JSON.stringify(apiResponse.data, null, 2)}`);
       setResponseBody(JSON.stringify(apiResponse.data, null, 2));
-      setResponseHeaders(JSON.stringify(apiResponse.headers, null, 2));
+      setResponseHeaders(JSON.stringify(responseHeaders, null, 2));
     } catch (error) {
-      console.error("API call error: ", error);
-      appendTerminalOutput("API call error: ", error);
+      appendTerminalOutput(`API call error: ${error}`);
     }
   };
 
   const handleSendRequest = async () => {
-    console.log(`Endpoint: ${endpoint} \nScopes: ${scopes}`);
+    console.log(`Endpoint: ${endpoint} \nScopes: ${scopes} \nMethod: ${method} \nAPI Wrapper URL: ${apiWrapperUrl}`);
 
     if (accounts.length > 0) {
       const account = accounts[0];
@@ -98,11 +125,19 @@ const RequestSection = () => {
             scopes: [scopes],
             account: account,
           };
-          console.log(request);
+
+          // Check if userId already exists in the endpoint
+          const userIdPlaceholder = `{${account.localAccountId}}/ProtectionScopes/Query`;
+          let updatedEndpoint = endpoint;
+          if (!endpoint.includes(userIdPlaceholder)) {
+            updatedEndpoint = `${endpoint}/${account.localAccountId}/ProtectionScopes/Query`;
+            setEndpoint(updatedEndpoint);
+          }
 
           try {
             const accessToken = await acquireToken(request);
-            await makeApiCall(accessToken);
+            await appendTerminalOutput(`Request URL: ${updatedEndpoint}`);
+            await makeApiCall(apiWrapperUrl, accessToken, method);
           } catch (error) {
             console.error("Error during request handling: ", error);
           }

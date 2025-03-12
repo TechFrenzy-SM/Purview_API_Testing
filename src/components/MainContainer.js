@@ -3,8 +3,8 @@ import React from "react";
 import APISection from "./APISection";
 import RequestSection from "./RequestSection";
 import ResponseSection from "./ResponseSection";
-import { ApiProvider } from "../APIContext";
-import { TerminalProvider } from "../TerminalContext";
+import { ApiProvider } from "../contexts/APIContext";
+import { TerminalProvider } from "../contexts/TerminalContext";
 
 const MainContainer = () => {
   return (

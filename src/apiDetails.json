@@ -1,26 +1,24 @@
 {
-  "GraphAPI": {
-    "endpoint": "https://graph.microsoft.com/v1.0/me",
-    "permission": "https://graph.microsoft.com/user.read"
-  },
   "ProtectionScopesInitialCall": {
-    "endpoint": "https://api.purview.microsoft.com/v1/users/",
+    "endpoint": "https://api.purview.microsoft.com/v1/users",
+    "apiWrapperUrl": "https://p4ai-api.azurewebsites.net/api/ProtectionScopes",
+    "method": "POST",
     "permission": "https://api.purview.microsoft.com/Purview.ProtectionScopes.Read.All"
   },
   "ProtectionScopesSubsequentCalls": {
-    "endpoint": "https://api.purview.microsoft.com/v1/users/",
+    "endpoint": "https://api.purview.microsoft.com/v1/users",
     "permission": "https://api.purview.microsoft.com/Purview.ProtectionScopes.Read.All"
   },
   "ProcessContentStartConversation": {
-    "endpoint": "https://api.purview.microsoft.com/v1/users/",
+    "endpoint": "https://api.purview.microsoft.com/v1/users",
     "permission": "https://api.purview.microsoft.com/Purview.Content.Process.All"
   },
   "ProcessContentContinueConversationWithResponse": {
-    "endpoint": "https://api.purview.microsoft.com/v1/users/",
+    "endpoint": "https://api.purview.microsoft.com/v1/users",
     "permission": "https://api.purview.microsoft.com/Purview.Content.Process.All"
   },
   "ProcessContentContinueConversationWithPrompt": {
-    "endpoint": "https://api.purview.microsoft.com/v1/users/",
+    "endpoint": "https://api.purview.microsoft.com/v1/users",
     "permission": "https://api.purview.microsoft.com/Purview.Content.Process.All"
   }
 }

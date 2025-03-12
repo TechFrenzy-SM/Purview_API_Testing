@@ -8,12 +8,14 @@ export const TerminalProvider = ({ children }) => {
   const [responseHeaders, setResponseHeaders] = useState([]);
 
   const appendTerminalOutput = (message) => {
-    setTerminalOutput((prevOutput) => `${prevOutput}\n${message}`);
+    const datetime = new Date().toLocaleString();
+    setTerminalOutput((prevOutput) => `${prevOutput}\n[${datetime}] : ${message}`);
   };
   return (
     <TerminalContext.Provider
       value={{
         terminalOutput,
+        setTerminalOutput,
         appendTerminalOutput,
         responseBody,
         setResponseBody,
