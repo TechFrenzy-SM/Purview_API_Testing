@@ -1,11 +1,11 @@
-import { AppBar, Avatar, Box, Button, Container, Grid2 as Grid, IconButton, Popover, Toolbar, Typography } from "@mui/material";
+import { AppBar, Avatar, Box, Button, Container, Divider, Drawer, Grid2 as Grid, IconButton, Popover, Toolbar, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthenticatedTemplate, useMsal } from "@azure/msal-react";
 import { loginRequest_user } from "../authConfig";
 import { InteractionRequiredAuthError } from "@azure/msal-browser";
 import { GetUserProfilePic } from "../GraphData";
-import { FeedbackOutlined, HelpOutlineOutlined } from "@mui/icons-material";
+import { FeedbackOutlined, HelpOutlineOutlined, MenuTwoTone } from "@mui/icons-material";
 
 const Header = () => {
   const { instance, accounts } = useMsal();
@@ -15,6 +15,7 @@ const Header = () => {
   const [anchor, setAnchor] = useState(null);
   const [accessToken, setAccessToken] = useState();
   const [profileImg, setProfileImg] = useState();
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const open = Boolean(anchor);
   const avatarRef = useRef(null);
@@ -71,6 +72,13 @@ const Header = () => {
     setAnchor(null);
   };
 
+  const toggleDrawer = (open) => (event) => {
+    if (event.type === "keydown" && (event.key === "Tab" || event.key === "Shift")) {
+      return;
+    }
+    setDrawerOpen(open);
+  };
+
   // Make Graph API call
   useEffect(() => {
     const fetchData = async () => {
@@ -89,6 +97,9 @@ const Header = () => {
     <AppBar position="sticky" sx={styles.appBar}>
       <Container maxWidth="xl">
         <Toolbar sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <IconButton style={{ color: "#fff" }} sx={{ display: { xs: "inline", sm: "none" } }} onClick={toggleDrawer(true)}>
+            <MenuTwoTone />
+          </IconButton>
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Box component={"img"} sx={styles.appLogo} src="" />
             <Typography variant="h5" sx={styles.appName} component={Link} to={"/"}>
@@ -96,17 +107,57 @@ const Header = () => {
             </Typography>
           </Box>
           <Box sx={{ flexGrow: 1 }} />
+          <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
+            <Box sx={{ width: "250px" }} role="presentation" onClick={toggleDrawer(false)} onKeyDown={toggleDrawer(false)}>
+              <Box sx={{ p: 2 }}>
+                <Box sx={{ height: "200px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                  <Typography variant="h5" sx={styles.drawerAppName} component={Link} to={"/"}>
+                    P4AI API Testing
+                  </Typography>
+                </Box>
+                <Divider />
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 2 }}>
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <IconButton title="Feedback" style={{ color: "#000" }}>
+                      <FeedbackOutlined />
+                    </IconButton>
+                    <Typography variant="body2" component={Link} to={"/feedback"} sx={{ color: "#000", textDecoration: "none", fontSize: "1rem" }}>
+                      Feedback
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <IconButton title="Help" style={{ color: "#000" }}>
+                      <HelpOutlineOutlined />
+                    </IconButton>
+                    <Typography variant="body2" component={Link} to={"/help"} sx={{ color: "#000", textDecoration: "none", fontSize: "1rem" }}>
+                      Help
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <IconButton title="Account" style={{ color: "#000" }} onClick={handleOpenProfileCard} ref={avatarRef}>
+                      <Avatar alt={username} src={profileImg} />
+                    </IconButton>
+                    <Typography variant="body2" sx={{ color: "#000", fontSize: "1rem" }}>
+                      {userObj.name}
+                    </Typography>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+          </Drawer>
           <AuthenticatedTemplate>
-            <IconButton title="Feedback" style={{ color: "#fff" }}>
-              <FeedbackOutlined />
-            </IconButton>
-            <IconButton title="Help" style={{ color: "#fff" }}>
-              <HelpOutlineOutlined />
-            </IconButton>
-            <IconButton title="Account" style={{ color: "#fff" }} onClick={handleOpenProfileCard} ref={avatarRef}>
-              <Avatar alt={username} src={profileImg} />
-            </IconButton>
-            <Popover open={open} anchorEl={anchor} onClose={handleCloseProfileCard} anchorOrigin={{ vertical: "bottom", horizontal: "center" }} transformOrigin={{ vertical: "top", horizontal: "center" }} sx={{ mt: 1 }}>
+            <Box sx={{ display: { sm: "flex", xs: "none" }, gap: 1 }}>
+              <IconButton title="Feedback" style={{ color: "#fff" }}>
+                <FeedbackOutlined />
+              </IconButton>
+              <IconButton title="Help" style={{ color: "#fff" }}>
+                <HelpOutlineOutlined />
+              </IconButton>
+              <IconButton title="Account" style={{ color: "#fff" }} onClick={handleOpenProfileCard} ref={avatarRef}>
+                <Avatar alt={username} src={profileImg} />
+              </IconButton>
+            </Box>
+            <Popover open={open} anchorEl={anchor} onClose={handleCloseProfileCard} anchorOrigin={{ vertical: "bottom", horizontal: "right" }} transformOrigin={{ vertical: "top", horizontal: "right" }} sx={{ mt: 1 }}>
               <Box sx={{ p: 2, width: "400px", height: "auto" }}>
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
                   <Typography variant="body1">{userObj.tenantName}</Typography>
@@ -155,11 +206,18 @@ const styles = {
   appBar: {
     bgcolor: "#333333",
   },
-  appLogo: {},
   appName: {
-    display: { xs: "none", md: "inline" },
+    display: { xs: "none", sm: "inline" },
     color: "#fff",
     textDecoration: "none",
     cursor: "pointer",
+    fontSize: { xs: "1rem", sm: "1.25rem", md: "1.5rem" },
+  },
+  drawerAppName: {
+    color: "#000",
+    textDecoration: "none",
+    cursor: "pointer",
+    fontSize: "1.5rem",
+    mb: 2,
   },
 };
