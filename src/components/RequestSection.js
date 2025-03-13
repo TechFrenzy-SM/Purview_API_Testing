@@ -19,7 +19,6 @@ const RequestSection = () => {
   const [requestBody, setRequestBody] = useState("{\n  \n}");
   const [key, setKey] = useState("");
   const [value, setValue] = useState("");
-  const [accessToken, setAccessToken] = useState();
 
   const handleChange = (event, newValue) => {
     setTabValue(newValue);
@@ -130,7 +129,7 @@ const RequestSection = () => {
           const userIdPlaceholder = `{${account.localAccountId}}/ProtectionScopes/Query`;
           let updatedEndpoint = endpoint;
           if (!endpoint.includes(userIdPlaceholder)) {
-            updatedEndpoint = `${endpoint}/${account.localAccountId}/ProtectionScopes/Query`;
+            updatedEndpoint = `${endpoint}/{${account.localAccountId}}/ProtectionScopes/Query`;
             setEndpoint(updatedEndpoint);
           }
 

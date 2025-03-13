@@ -94,7 +94,6 @@ const styles = {
     padding: "10px",
     border: "2px solid #ccc",
     borderRadius: 2,
-    overflow: "auto",
   },
   terminalBox: {
     mt: 2,
